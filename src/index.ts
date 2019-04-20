@@ -75,7 +75,6 @@ export function useEditableState<T>({
     (newValue: T) => {
       setEditValueRaw(newValue);
       if (localStorageKey) {
-        console.log("WRITING TO LS", serialize(editValue));
         localStorage.setItem(localStorageKey, serialize(editValue));
         setHasDraft(true);
       }
