@@ -2,22 +2,34 @@
  * @class ExampleComponent
  */
 
-import * as React from 'react'
+import { useState, useCallback } from "react";
 
-import styles from './styles.css'
+export function useEditableState<T>(
+  value: T,
+  onValueChanged: (newValue: T) => void
+) {
+  const [editValue, setEditValue] = useState<T>(value);
+  const [isEditing, setIsEditing] = useState(false);
 
-export type Props = { text: string }
+  const onEditBegin = useCallback(() => {
+    setEditValue(value);
+    setIsEditing(true);
+  }, [value]);
+  const onEditConfirm = useCallback(() => {
+    onValueChanged(editValue);
+    setIsEditing(false);
+  }, [editValue]);
+  const onEditCancel = useCallback(() => {
+    setEditValue(value);
+    setIsEditing(false);
+  }, [value]);
 
-export default class ExampleComponent extends React.Component<Props> {
-  render() {
-    const {
-      text
-    } = this.props
-
-    return (
-      <div className={styles.test}>
-        Example Component: {text}
-      </div>
-    )
-  }
+  return {
+    onEditBegin,
+    onEditConfirm,
+    onEditCancel,
+    isEditing,
+    editValue,
+    setEditValue
+  };
 }
