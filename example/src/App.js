@@ -8,8 +8,14 @@ const EditableTextField = ({ value, onValueChanged }) => {
     onEditCancel,
     isEditing,
     editValue,
-    setEditValue
-  } = useEditableState(value, onValueChanged);
+    setEditValue,
+    useDraft,
+    hasDraft
+  } = useEditableState({
+    value,
+    onValueChanged,
+    localStorageKey: "ui.drafts.my-test-field"
+  });
 
   if (isEditing) {
     return (
@@ -27,11 +33,14 @@ const EditableTextField = ({ value, onValueChanged }) => {
     );
   } else {
     return (
-      <div className="container">
-        <div className="content">{value}</div>
-        <div className="buttons">
-          <button onClick={onEditBegin}>Edit</button>
+      <div>
+        <div className="container">
+          <div className="content">{value}</div>
+          <div className="buttons">
+            <button onClick={onEditBegin}>Edit</button>
+          </div>
         </div>
+        {hasDraft ? <button onClick={useDraft}>Load draft</button> : null}
       </div>
     );
   }
@@ -40,10 +49,15 @@ const EditableTextField = ({ value, onValueChanged }) => {
 const App = () => {
   const [myValue, setMyValue] = useState("initial value");
   return (
-    <EditableTextField
-      value={myValue}
-      onValueChanged={newValue => setMyValue(newValue)}
-    />
+    <div>
+      <EditableTextField
+        value={myValue}
+        onValueChanged={newValue => setMyValue(newValue)}
+      />
+      <button onClick={() => setMyValue("a new initial value")}>
+        Set new initial value
+      </button>
+    </div>
   );
 };
 
