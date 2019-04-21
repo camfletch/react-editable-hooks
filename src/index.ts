@@ -1,7 +1,3 @@
-/**
- * @class ExampleComponent
- */
-
 import { useState, useCallback, useEffect } from "react";
 
 export interface EditableState<T> {
@@ -46,7 +42,7 @@ export function useEditableState<T>({
       localStorage.removeItem(localStorageKey);
       setHasDraft(false);
     }
-  }, [editValue]);
+  }, [editValue, localStorageKey, onValueChanged]);
 
   const onEditCancel = useCallback(() => {
     setEditValueRaw(value);
@@ -55,7 +51,7 @@ export function useEditableState<T>({
       localStorage.removeItem(localStorageKey);
       setHasDraft(false);
     }
-  }, [value]);
+  }, [localStorageKey, value]);
 
   const useDraft = useCallback(() => {
     if (!localStorageKey) {
@@ -69,7 +65,7 @@ export function useEditableState<T>({
       localStorage.removeItem(localStorageKey);
       setHasDraft(false);
     }
-  }, [localStorageKey]);
+  }, [deserialize, localStorageKey]);
 
   const setEditValue = useCallback(
     (newValue: T) => {
@@ -79,7 +75,7 @@ export function useEditableState<T>({
         setHasDraft(true);
       }
     },
-    [localStorageKey, editValue]
+    [localStorageKey, serialize, editValue]
   );
 
   useEffect(() => {

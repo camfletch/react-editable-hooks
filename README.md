@@ -13,17 +13,47 @@ npm install --save react-editable-hooks
 ## Usage
 
 ```tsx
-import * as React from 'react'
+import * as React from "react";
+import { useEditableState } from "react-editable-hooks";
 
-import MyComponent from 'react-editable-hooks'
+const EditableTextField = ({ value, onValueChanged }) => {
+  const {
+    onEditBegin,
+    onEditConfirm,
+    onEditCancel,
+    isEditing,
+    editValue,
+    setEditValue,
+    useDraft,
+    hasDraft
+  } = useEditableState({
+    value,
+    onValueChanged,
+    localStorageKey: "ui.drafts.my-test-field"
+  });
 
-class Example extends React.Component {
-  render () {
+  if (isEditing) {
     return (
-      <MyComponent />
-    )
+      <>
+        <input
+          className="content"
+          value={editValue}
+          onChange={e => setEditValue(e.target.value)}
+        />
+        <button onClick={onEditConfirm}>Confirm</button>
+        <button onClick={onEditCancel}>Cancel</button>
+      </>
+    );
+  } else {
+    return (
+      <>
+        <span>{value}</span>
+        <button onClick={onEditBegin}>Edit</button>
+        {hasDraft ? <button onClick={useDraft}>Load draft</button> : null}
+      </>
+    );
   }
-}
+};
 ```
 
 ## License
