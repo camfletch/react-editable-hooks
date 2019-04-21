@@ -21,6 +21,7 @@ yarn add react-editable-hooks
 ## Features
 
 - Unopinionated about UI, just manages edting state for you
+- Written in TypeScript
 - Automatically back-up editing state (drafts) to localStorage, and allow them to be loaded
 - New external values won't blow away your editing state
 
@@ -45,7 +46,10 @@ const EditableTextField = ({ value, onValueChanged }) => {
   } = useEditableState({
     value, // The 'true' value of the field (eg. the last value we have received from server)
     onValueChanged, // Callback to save a new value (eg. to server)
+
     localStorageKey: "ui.drafts.my-test-field" // Key to save 'drafts' to localStorage
+    serialize: editValue => editValue, // Function to serialize the editValue into a string
+    deserialize: draftValue => draftValue, // Function to deserialize the editValue from a string
   });
 
   if (isEditing) {
