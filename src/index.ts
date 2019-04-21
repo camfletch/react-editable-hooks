@@ -4,7 +4,7 @@
 
 import { useState, useCallback, useEffect } from "react";
 
-export type EditableState<T> = {
+export interface EditableState<T> {
   isEditing: boolean;
   editValue: T;
   setEditValue: (newValue: T) => void;
@@ -13,15 +13,15 @@ export type EditableState<T> = {
   onEditCancel: () => void;
   hasDraft: boolean;
   useDraft: () => void;
-};
+}
 
-export type UseEditableStateArguments<T> = {
+export interface UseEditableStateArguments<T> {
   value: T;
   onValueChanged: (newValue: T) => void;
   localStorageKey?: string;
   serialize?: (value: T) => string;
   deserialize?: (serializedValue: string) => T;
-};
+}
 
 export function useEditableState<T>({
   value,
@@ -35,7 +35,7 @@ export function useEditableState<T>({
   const [hasDraft, setHasDraft] = useState(false);
 
   const onEditBegin = useCallback(() => {
-    setEditValue(value);
+    setEditValueRaw(value);
     setIsEditing(true);
   }, [value]);
 
@@ -49,7 +49,7 @@ export function useEditableState<T>({
   }, [editValue]);
 
   const onEditCancel = useCallback(() => {
-    setEditValue(value);
+    setEditValueRaw(value);
     setIsEditing(false);
     if (localStorageKey) {
       localStorage.removeItem(localStorageKey);
@@ -65,7 +65,7 @@ export function useEditableState<T>({
     const draft = localStorage.getItem(localStorageKey);
     if (draft) {
       setIsEditing(true);
-      setEditValue(deserialize(draft));
+      setEditValueRaw(deserialize(draft));
       localStorage.removeItem(localStorageKey);
       setHasDraft(false);
     }
