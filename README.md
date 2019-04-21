@@ -58,4 +58,4 @@ const EditableTextField = ({ value, onValueChanged }) => {
 
 ## License
 
-MIT © [cameronfletcher92](https://github.com/cameronfletcher92)
+MIT © [camfletch](https://github.com/camfletch)
