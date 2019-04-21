@@ -1,14 +1,28 @@
 # react-editable-hooks
 
-> Hooks for managing editable field state
+Hooks for managing editable field state in React.
 
-[![NPM](https://img.shields.io/npm/v/react-editable-hooks.svg)](https://www.npmjs.com/package/react-editable-hooks) [![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com)
+## Example
+
+https://camfletch.github.io/react-editable-hooks/
 
 ## Install
 
 ```bash
 npm install --save react-editable-hooks
 ```
+
+or
+
+```bash
+yarn add react-editable-hooks
+```
+
+## Features
+
+- Unopinionated about UI, just manages edting state for you
+- Automatically back-up editing state (drafts) to localStorage, and allow them to be loaded
+- New external values won't blow away your editing state
 
 ## Usage
 
@@ -18,18 +32,20 @@ import { useEditableState } from "react-editable-hooks";
 
 const EditableTextField = ({ value, onValueChanged }) => {
   const {
-    onEditBegin,
-    onEditConfirm,
-    onEditCancel,
-    isEditing,
-    editValue,
-    setEditValue,
-    useDraft,
-    hasDraft
+    onEditBegin, // Callback to initiate editing
+    onEditConfirm, // Callback to complete editing
+    onEditCancel, // Callback to cancel editing
+
+    isEditing, // Boolean indicating whether the field is being edited
+    editValue, // 'Temporary' value of the field during editing
+    setEditValue, // Callback to set a new 'temporary' value during editing
+
+    hasDraft, // Boolean indicating whether there is a 'draft' in localStorage
+    useDraft // Callback to load the 'draft' from localStorage
   } = useEditableState({
-    value,
-    onValueChanged,
-    localStorageKey: "ui.drafts.my-test-field"
+    value, // The 'true' value of the field (eg. the last value we have received from server)
+    onValueChanged, // Callback to save a new value (eg. to server)
+    localStorageKey: "ui.drafts.my-test-field" // Key to save 'drafts' to localStorage
   });
 
   if (isEditing) {
