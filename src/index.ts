@@ -1,5 +1,6 @@
 import { useState, useCallback, useEffect } from "react";
 
+/** The return value for {@link useEditableState} */
 export interface EditableState<T> {
   /**
    * Whether the field is currently being edited. This should be used to
@@ -42,6 +43,7 @@ export interface EditableState<T> {
   useDraft: () => void;
 }
 
+/** The arguments for {@link useEditableState} */
 export interface UseEditableStateArguments<T> {
   /**
    * The 'true' value for the editable field (eg. from the server).
@@ -69,6 +71,10 @@ export interface UseEditableStateArguments<T> {
   deserialize?: (serializedValue: string) => T;
 }
 
+/**
+ * A custom hook for managing editable field state with support for saving
+ * drafts to localStorage
+ */
 export function useEditableState<T>({
   value,
   onValueChanged,
